@@ -20,12 +20,11 @@ namespace RealtOn
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ConstructQuery();
 
-           
-
-            Form ifrm = new Objects(filtr);
-            ifrm.Show(); // отображаем Form1
-            this.Close();
+            //Form ifrm = new Objects(filtr);
+           // ifrm.Show(); // отображаем Form1
+           // this.Close();
             // richTextBox1.Text =  dadata.SuggestAddress(textBox1.Text.ToString()).ToString();
            
         }
@@ -91,8 +90,23 @@ namespace RealtOn
         {
             listBox1.Visible = !listBox1.Visible;
         }
+        private void ConstructQuery()
+        {
+            List<string> params_f = new List<string>();
 
-        private void ObjectFilter_Load(object sender, EventArgs e)
+            if (Renovation.CheckedIndices.Count > 0)
+                params_f.Add("renovation in(" + string.Join(",", Renovation.CheckedIndices.Cast<int>().ToArray().Select((x => x + 1))) + ")");
+            if (Status.CheckedIndices.Count > 0)
+                params_f.Add("Objects.status in(" + string.Join(",", Status.CheckedIndices.Cast<int>().ToArray().Select((x => x + 1))) + ")");
+            if (Otype.CheckedIndices.Count > 0)
+                params_f.Add("Objects.type in(" + string.Join(",", Otype.CheckedIndices.Cast<int>().ToArray().Select((x => x + 1))) + ")");
+            if (Wall.CheckedIndices.Count > 0)
+                params_f.Add("Objects.wall in(" + string.Join(",", Wall.CheckedIndices.Cast<int>().ToArray().Select((x => x + 1))) + ")");
+
+            filtr = "where " + string.Join(" and ", params_f.ToArray());
+            richTextBox1.Text = filtr;
+        }
+            private void ObjectFilter_Load(object sender, EventArgs e)
         {
 
           
@@ -121,19 +135,7 @@ namespace RealtOn
             //  richTextBox1.Clear();
             // foreach (var index in Renovation.CheckedIndices)
             // Renovation.CheckedIndices;
-            List<string> params_f = new List<string>();
-          
-           if(Renovation.CheckedIndices.Count > 0)
-                params_f.Add("renovation in(" +  string.Join(",", Renovation.CheckedIndices.Cast<int>().ToArray().Select((x => x + 1))) + ")");
-           if (Status.CheckedIndices.Count > 0)
-                params_f.Add("Objects.status in(" + string.Join(",", Status.CheckedIndices.Cast<int>().ToArray().Select((x => x + 1))) + ")");
-           if (Otype.CheckedIndices.Count > 0)
-                params_f.Add("Objects.type in(" + string.Join(",", Otype.CheckedIndices.Cast<int>().ToArray().Select((x => x + 1))) + ")");
-           if (Wall.CheckedIndices.Count > 0)
-                params_f.Add("Objects.wall in(" + string.Join(",", Wall.CheckedIndices.Cast<int>().ToArray().Select((x => x + 1))) + ")");
-
-            filtr = "where "+ string.Join(" and ", params_f.ToArray());
-            richTextBox1.Text = filtr;
+           
 
         }
 
